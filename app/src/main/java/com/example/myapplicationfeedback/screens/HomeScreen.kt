@@ -10,20 +10,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.myapplicationfeedback.components.BannerHomeComponent
 import com.example.myapplicationfeedback.components.DrawerComponent
 
 @Composable
 fun UserHome(
+    navController: NavController
 
 ){
-    val navController = NavHostController(context = androidx.compose.ui.platform.LocalContext.current)
+
 
     Surface(
         color = Color.White,
         modifier = Modifier.fillMaxWidth()
-              .fillMaxSize()
+            .fillMaxSize()
 
 
 
@@ -31,7 +33,7 @@ fun UserHome(
 
     ) {
         Column {
-            DrawerComponent( navHostController = navController)
+            DrawerComponent( navController = navController)
 
 
 
@@ -47,7 +49,6 @@ fun UserHome(
         }
     }
 
-    }
-
+}
 
 

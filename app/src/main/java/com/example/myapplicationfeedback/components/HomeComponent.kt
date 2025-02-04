@@ -32,6 +32,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,70 +43,226 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.myapplicationfeedback.R
 import com.example.myapplicationfeedback.screens.Screen
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun DrawerComponent(modifier: Modifier = Modifier, navHostController: NavController){
+fun DrawerComponent(modifier: Modifier = Modifier, navController: NavController ){
+
     //initial state
     val drawerState =
         rememberDrawerState(initialValue = DrawerValue.Closed)
 
     //scope of close and open drawer
     val scope = rememberCoroutineScope()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-        //modal navigation drawer
+    //modal navigation drawer
+    val currentRoute = navBackStackEntry?.destination?.route
 
-
-   ModalNavigationDrawer(
-       drawerState = drawerState,
-       drawerContent = {
-         ModalDrawerSheet {
-             DrawerContent( scope, drawerState)
-
-         }
-
-       },
-       content = {
-           // Scaffold component open and close drawable
-           Scaffold(
-               topBar = { TopBar(
-                   onOpenDrawer = {
-                       scope.launch {
-                           drawerState.apply{
-                               if (isClosed) open() else close()
-                           }
-                       }
-                   }
-               ) },
-               modifier = Modifier.background(Color.White)
-
-           ){
-
-               padding->
-               ScreenContent( modifier = Modifier.padding(top = 60.dp))
-           }
-
-
-
-       },
+    //drawer content
 
 
 
 
-   )
+
+
+    ModalNavigationDrawer(
+
+        drawerState = drawerState,
+
+
+        drawerContent = {
+            ModalDrawerSheet {
+
+
+
+                Image(
+                    painter = painterResource(id = R.drawable.wave),
+                    contentDescription = "wave",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(150.dp),
+                    //align center
+                    contentScale = ContentScale.Crop,
+
+
+                    )
+                Text(
+                    text = "Welcome to Feddie",
+                    modifier = Modifier.padding(16.dp)
+                    ,
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 20.sp),
+                    color = colorResource(id = R.color.skyBlue),
+                    textAlign = TextAlign.Center,
+
+
+
+                    )
+                HorizontalDivider()
+
+                Spacer(modifier = Modifier.padding(5.dp))
+
+
+                NavigationDrawerItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Home",
+                            modifier = Modifier.size(28.dp)
+
+
+                        )
+                    },
+                    label ={
+                        Text(
+                            text = "Home",
+                            fontSize = 15.sp,
+
+                            modifier = Modifier.padding(16.dp)
+                        )
+
+                    },
+                    selected = false,
+                    onClick = {
+
+                        navController.navigate(Screen.HomeScreen.route)
+
+
+
+                    },
+
+                    )
+
+                NavigationDrawerItem(
+
+
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Feedback,
+                            contentDescription = "Account",
+                            modifier = Modifier.size(28.dp)
+                        )
+                    },
+                    label ={
+                        Text(
+                            text = "leave a feedback",
+                            fontSize = 15.sp,
+
+                            modifier = Modifier.padding(16.dp)
+
+                        )
+
+                    },
+                    selected = false,
+                    onClick = {
+                        navController.navigate(Screen.LeaveAfeedback.route)
+
+
+                    },
+
+                    )
+
+                NavigationDrawerItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "History",
+                            modifier = Modifier.size(28.dp)
+                        )
+                    },
+                    label ={
+                        Text(
+                            text = "feedback history",
+                            fontSize = 15.sp,
+
+                            modifier = Modifier.padding(16.dp)
+                        )
+
+                    },
+                    selected = false,
+                    onClick = {
+                        navController.navigate(Screen.FeedHistory.route)
+
+
+                    },
+
+                    )
+
+
+            }
+
+        },
+        content = {
+            // Scaffold component open and close drawable
+            Scaffold(
+                topBar = { TopBar(
+                    onOpenDrawer = {
+
+                        scope.launch {
+                            drawerState.apply{
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    }
+                )
+                    //
+                         },
+                modifier = Modifier.background(Color.White)
+
+            ){
+
+                    innerPadding ->
+                when (
+                    currentRoute
+
+
+
+
+                ) {
+
+                    Screen.HomeScreen.route -> {
+                        ScreenContent(modifier = Modifier.padding(innerPadding))
+                    }
+
+                    Screen.LeaveAfeedback.route -> {
+                        FeedBackScreenContent(modifier = Modifier.padding(innerPadding))
+                    }
+
+                    Screen.FeedHistory.route -> {
+                        FeedBackHistoryScreenContent(modifier = Modifier.padding(innerPadding))
+                    }
+
+                    else -> {
+                        ScreenContent(modifier = Modifier.padding(innerPadding) )
+                    }
+                }
+
+
+            }
+
+
+
+        },
+
+
+
+
+        )
 
 
 
 }
 @Composable
-fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier) {
+fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier,  navController: NavController) {
 
     Image(
         painter = painterResource(id = R.drawable.wave),
@@ -128,7 +285,7 @@ fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier) 
 
 
 
-    )
+        )
     HorizontalDivider()
 
     Spacer(modifier = Modifier.padding(5.dp))
@@ -154,7 +311,12 @@ fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier) 
 
         },
         selected = false,
+
         onClick = {
+
+
+            navController.navigate(Screen.HomeScreen.route)
+
 
 
         },
@@ -167,7 +329,7 @@ fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier) 
         icon = {
             Icon(
                 imageVector = Icons.Default.Feedback,
-                contentDescription = "Account",
+                contentDescription = " leaveAfeedback",
                 modifier = Modifier.size(28.dp)
             )
         },
@@ -185,9 +347,12 @@ fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier) 
         onClick = {
 
 
+            navController.navigate(Screen.LeaveAfeedback.route)
+
+
         },
 
-    )
+        )
 
     NavigationDrawerItem(
         icon = {
@@ -208,6 +373,8 @@ fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier) 
         },
         selected = false,
         onClick = {
+            navController.navigate(Screen.FeedHistory.route)
+
 
 
         },
@@ -219,13 +386,31 @@ fun DrawerContent( scope: Any, drawerState: Any, modifier: Modifier = Modifier) 
 }
 
 @Composable
+fun FeedBackScreenContent( modifier: Modifier = Modifier){
+    Spacer(modifier = Modifier.padding(10.dp))
+    ExpandableComponent( navController=NavController ( LocalContext.current)  )
+
+}
+
+@Composable
+fun FeedBackHistoryScreenContent( modifier: Modifier = Modifier){
+    Text(text = "FeedBack History")
+}
+
+
+@Composable
 fun ScreenContent(  modifier: Modifier = Modifier){
-    BannerHomeComponent()
+    Spacer(modifier = Modifier.padding(10.dp))
+    BannerHomeComponent( navController=NavController( LocalContext.current))
+
+
+
 
 
 
 
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -239,7 +424,7 @@ fun TopBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = colorResource(R.color.skyBlue),
 
-        ),
+            ),
         //navigation icon
         navigationIcon = {
             Icon(
@@ -269,11 +454,11 @@ fun TopBar(
 
 
             Icon(
-            imageVector = Icons.Default.Notifications,
-            contentDescription = "Account",
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(28.dp)
+                imageVector = Icons.Default.Notifications,
+                contentDescription = "Account",
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(28.dp)
             )
 
             Box {
@@ -288,13 +473,13 @@ fun TopBar(
                     expanded = expanded.value,
                     onDismissRequest = { expanded.value = false },
 
-                ) {
+                    ) {
                     DropdownMenuItem(
                         text = { Text("Log Out") },
                         onClick = { expanded.value = false },
 
 
-                    )
+                        )
 
                 }
             }
@@ -305,16 +490,6 @@ fun TopBar(
 
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

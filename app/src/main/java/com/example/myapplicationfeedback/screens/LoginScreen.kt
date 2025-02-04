@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.myapplicationfeedback.components.ButtonComponent
 import com.example.myapplicationfeedback.components.ForgotPassword
@@ -26,7 +27,7 @@ import com.example.myapplicationfeedback.components.TextComponent
 
 
 @Composable
-fun Login( navController: NavHostController){
+fun Login( navController: NavController){
 
 
     Surface(

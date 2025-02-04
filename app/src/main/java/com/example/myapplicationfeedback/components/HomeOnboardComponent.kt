@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -14,14 +15,24 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.myapplicationfeedback.R
+import com.example.myapplicationfeedback.screens.Screen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -29,7 +40,9 @@ import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun BannerHomeComponent() {
+fun BannerHomeComponent(
+    navController: NavController
+) {
     //banner image
     val images = listOf(
         R.drawable.coll
@@ -68,8 +81,12 @@ fun BannerHomeComponent() {
             }
 
         }
-        Spacer( modifier = Modifier.padding(10.dp))
-        TextHomeComponent( navHostController = NavHostController(context = androidx.compose.ui.platform.LocalContext.current))
+
+        Spacer(modifier = Modifier.padding(10.dp))
+        TextHomeComponent( navController=NavController( LocalContext.current))
+        Spacer(modifier = Modifier.padding(10.dp))
+
+
     }
 
 
@@ -79,7 +96,9 @@ fun BannerHomeComponent() {
 
 @Composable
 fun TextHomeComponent(
-    navHostController: NavHostController
+    navController: NavController
+
+
 
 ) {
 
@@ -113,7 +132,7 @@ fun TextHomeComponent(
 
         Button(
             onClick = {
-                navHostController.navigate("LeaveAfeedback")
+               navController.navigate(Screen.LeaveAfeedback.route)
 
 
             },
@@ -128,4 +147,40 @@ fun TextHomeComponent(
 
 
     }
+}
+
+//welcome animation
+@Composable
+fun WelcomeAnimation() {
+    val isPlaying = remember {
+        mutableStateOf(true)
+    }
+    val speed = remember {
+        mutableStateOf(1f)
+
+    }
+
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.wedd)
+    )
+
+    val progress  by animateLottieCompositionAsState(
+        composition = composition,
+        isPlaying = isPlaying.value,
+        speed = speed.value,
+        restartOnPlay = true
+
+
+
+    )
+    LottieAnimation(
+        composition = composition,
+        progress = {progress},
+        modifier = Modifier.size(100.dp)
+
+    )
+
+
+
+
 }

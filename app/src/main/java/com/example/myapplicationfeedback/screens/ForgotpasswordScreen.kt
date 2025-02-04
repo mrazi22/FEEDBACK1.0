@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.myapplicationfeedback.components.ForgotBodyComponent
 import com.example.myapplicationfeedback.components.ForgotImageComponent
@@ -22,7 +23,7 @@ import com.example.myapplicationfeedback.components.LinkTextComponent
 
 @Composable
 fun ForgotPassword(
-    navController: NavHostController
+    navController: NavController
 ){
     Surface(
         color = Color.White,

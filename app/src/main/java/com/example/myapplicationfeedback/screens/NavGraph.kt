@@ -33,11 +33,7 @@ fun SetupNavGraph(
         ) {
             ForgotPassword( navController )
         }
-        composable(
-            route = Screen.HomeScreen.route
-        ) {
-            UserHome( )
-        }
+
         composable(
             route = Screen.LeaveAfeedback.route
         ) {
@@ -47,6 +43,11 @@ fun SetupNavGraph(
             route = Screen.FeedHistory.route
         ) {
             feedHistory( navController )
+        }
+        composable(
+            route = Screen.HomeScreen.route
+        ) {
+            UserHome(  navController)
         }
 
 

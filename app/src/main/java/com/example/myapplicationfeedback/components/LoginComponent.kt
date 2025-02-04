@@ -189,6 +189,7 @@ fun ButtonComponent(value: String, navController: NavController) {
     Button(
         onClick = {
             navController.navigate(Screen.HomeScreen.route)
+
         },
         modifier = Modifier.fillMaxWidth().heightIn(48.dp),
         // Apply to the outer
